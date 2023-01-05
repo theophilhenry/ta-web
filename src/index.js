@@ -8,6 +8,8 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import 'boxicons'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

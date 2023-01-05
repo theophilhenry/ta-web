@@ -54,7 +54,9 @@ const Cameras = (props) => {
     }
 
     // Turns into square
-    canvas.current.getContext('2d').drawImage(video.current, horizontal_start, vertical_start, canvas.current.width, canvas.current.height, 0, 0, canvas.current.width, canvas.current.height);
+    canvas.current.getContext('2d').drawImage(
+      video.current, horizontal_start, vertical_start, 
+      canvas.current.width, canvas.current.height, 0, 0, canvas.current.width, canvas.current.height);
     canvas.current.toBlob(function(blob){
       props.storeFiles([{file_data: blob ,preview: URL.createObjectURL(blob)}])
     },'image/png');
@@ -71,7 +73,6 @@ const Cameras = (props) => {
     video.current.srcObject = stream;
     play.current.classList.add('d-none');
     screenshot.current.classList.remove('d-none');
-
   };
 
   const getCameraSelection = async () => {
