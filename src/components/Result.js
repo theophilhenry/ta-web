@@ -8,7 +8,7 @@ const Result = ({plant, setPlant}) => {
   return (
     <>
     <div className='mt-5 mb-2'>
-      <img src={plant.url_gambar} className='w-100'/>
+      <img alt="Gambar Tanaman" src={plant.url_gambar} className='w-100'/>
       <h2>{plant.nama_umum}</h2>
       <p dangerouslySetInnerHTML={{__html: plant.nama_daerah}}></p>
     </div>

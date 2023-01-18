@@ -156,7 +156,7 @@ function App() {
           <h1 className='mt-5'>Selamat Datang di HerbaScan</h1>
           <p>Aplikasi Pengenalan Tanaman Obat Indonesia Menggunakan Gambar Tanaman!</p>
           <br/>
-          <p className='fw-bold'>Gambar yang dapat diterima oleh aplikasi  </p>
+          <p className='fw-bold'>Gambar yang dapat diterima oleh aplikasi : </p>
           <p className='d-flex align-items-center'>
             Daun Solo &nbsp; 
             <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
@@ -184,7 +184,7 @@ function App() {
 
           <ModalPeraturan/>
           
-          <div className='mt-5 mb-2'><input type='checkbox' id='useWebCamInput' onChange={toggleWebCam} /> <label for='useWebCamInput'>Use Web Cam</label></div>
+          <div className='mt-5 mb-2'><input type='checkbox' id='useWebCamInput' onChange={toggleWebCam} /> <label htmlFor='useWebCamInput'>Use Web Cam</label></div>
           <div className={`p-5 rounded-4 shadow ${useWebCam ? '' : 'd-none'}`}>
             <div className='mb-4'>
               <h2>WebCam</h2>
@@ -209,13 +209,13 @@ function App() {
             <div>
               {
                 cameraType === A ?
-                  <Cameras storeFiles={storeFilesA} /> :
+                  <Cameras cameraType={cameraType} storeFiles={storeFilesA} /> :
                   cameraType === B ?
-                    <Cameras storeFiles={storeFilesB} /> :
+                    <Cameras cameraType={cameraType} storeFiles={storeFilesB} /> :
                     cameraType === C ?
-                      <Cameras storeFiles={storeFilesC} /> :
+                      <Cameras cameraType={cameraType} storeFiles={storeFilesC} /> :
                       cameraType === D ?
-                        <Cameras storeFiles={storeFilesD} /> :
+                        <Cameras cameraType={cameraType} storeFiles={storeFilesD} /> :
                         <button className={`btn btn-warning w-100 disabled`}>Harap Pilih Pengaturan Sebelum Menggunakan Kamera</button>
               }
             </div>

@@ -19,24 +19,24 @@ function ModalGuidePhoto({title, imageType, caption1, caption2, caption3, captio
           <h6>Cara Foto</h6>
           <div className='container'>
             <div class='row d-flex justify-content-center'>
-              <img className='w-50' src={require(`../guidline-photo/${imageType}-1.png`)}/>
+              <img alt='guide-tanaman' className='w-50' src={require(`../guidline-photo/${imageType}-1.png`)}/>
               <p className='d-flex justify-content-center align-items-center mt-2 text-success'><box-icon color='green' name='check'></box-icon> {caption1}</p>
             </div>
             <div className='row row-cols-2'>
               <div>
-                <img className='w-100' src={require(`../guidline-photo/${imageType}-2.png`)}/>
+                <img alt='guide-tanaman' className='w-100' src={require(`../guidline-photo/${imageType}-2.png`)}/>
                 <p className='d-flex justify-content-center align-items-center mt-2 text-danger'><box-icon color='red' name='x'></box-icon> {caption2}</p>
               </div>
               <div>
-                <img className='w-100' src={require(`../guidline-photo/${imageType}-3.png`)}/>
+                <img alt='guide-tanaman' className='w-100' src={require(`../guidline-photo/${imageType}-3.png`)}/>
                 <p className='d-flex justify-content-center align-items-center mt-2 text-danger'><box-icon color='red' name='x'></box-icon> {caption3}</p>
               </div>
               <div>
-                <img className='w-100' src={require(`../guidline-photo/${imageType}-4.png`)}/>
+                <img alt='guide-tanaman' className='w-100' src={require(`../guidline-photo/${imageType}-4.png`)}/>
                 <p className='d-flex justify-content-center align-items-center mt-2 text-danger'><box-icon color='red' name='x'></box-icon> {caption4}</p>
               </div>
               <div>
-                <img className='w-100' src={require(`../guidline-photo/${imageType}-5.png`)}/>
+                <img alt='guide-tanaman' className='w-100' src={require(`../guidline-photo/${imageType}-5.png`)}/>
                 <p className='d-flex justify-content-center align-items-center mt-2 text-danger'><box-icon color='red' name='x'></box-icon> {caption5}</p>
               </div>
             </div>

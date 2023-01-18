@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
 
 const Cameras = (props) => {
   const [videoDevices, setVideoDevices] = useState([])
@@ -10,8 +11,19 @@ const Cameras = (props) => {
   const video_constraints = {};
   const first_overlay = useRef();
   const second_overlay = useRef();
+  const notify = () => toast.success(`Foto ${props.cameraType} Diambil!`, {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
 
   const cameraOptionsOnChange = () => {
+
     const updatedConstraints = {
       video: {
         ...video_constraints,
@@ -86,18 +98,19 @@ const Cameras = (props) => {
     video.current.addEventListener("resize", (ev) => {
       let w = video.current.videoWidth;
       let h = video.current.videoHeight;
+      var percentage;
     
       if (w && h) {
         if(w > h){
           var horizontal_start = (video.current.videoWidth - video.current.videoHeight) / 2
-          var percentage = (horizontal_start / video.current.videoWidth) * 100
+          percentage = (horizontal_start / video.current.videoWidth) * 100
           first_overlay.current.style.height = '100%'
           first_overlay.current.style.width = `${percentage}%`
           second_overlay.current.style.height = '100%'
           second_overlay.current.style.width = `${percentage}%`
         } else {
           var vertical_start = (video.current.videoHeight - video.current.videoWidth) / 2
-          var percentage = (vertical_start / video.current.videoHeight) * 100
+          percentage = (vertical_start / video.current.videoHeight) * 100
           first_overlay.current.style.width = '100%'
           first_overlay.current.style.height = `${percentage}%`
           second_overlay.current.style.width = '100%'
@@ -124,7 +137,8 @@ const Cameras = (props) => {
         </select>
         <div className="mt-2 mb-4">
           <button onClick={onPlay} ref={play} className="btn btn-primary play w-100" title="Play"><i data-feather="play-circle"></i> Mulai Camera</button>
-          <button className="btn btn-success screenshot d-none w-100" ref={screenshot} title="ScreenShot" onClick={submitPicture}><i data-feather="image"></i>Ambil Gambar</button>
+          <button className="btn btn-success screenshot d-none w-100" ref={screenshot} title="ScreenShot" onClick={() => {submitPicture(); notify();}}><i data-feather="image"></i>Ambil Gambar</button>
+          <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss={false} draggable pauseOnHover={false} theme="light"/>
         </div>
       </div>
 
