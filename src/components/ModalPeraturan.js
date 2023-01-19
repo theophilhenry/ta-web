@@ -8,7 +8,7 @@ function ModalPeraturan() {
   }
   return (
     <>
-      <button className="btn btn-primary" onClick={initModal}>
+      <button className="btn btn-secondary" onClick={initModal}>
         <span className='fw-bold'>Frequently Asked Questions</span>
       </button>
       <Modal show={isShow}>

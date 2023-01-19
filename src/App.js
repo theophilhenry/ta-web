@@ -9,6 +9,10 @@ import ModalPeraturan from './components/ModalPeraturan';
 const axios = require("axios").default;
 
 function App() {
+  // const URL = '36.81.111.124'
+  const URL = '192.168.100.27'
+  // const URL = 'localhost'
+
   const A = 'Daun Solo'
   const B = 'Daun Nempel'
   const C = 'Keseluruhan'
@@ -33,9 +37,6 @@ function App() {
   const storeFilesB = (file) => { setFilesB([...filesB, ...file]) }
   const storeFilesC = (file) => { setFilesC([...filesC, ...file]) }
   const storeFilesD = (file) => { setFilesD([...filesD, ...file]) }
-
-  // const URL = '36.81.111.124'
-  const URL = 'localhost'
 
   const sendFileA = async (selectedFile) => {
     let formData = new FormData();
@@ -153,36 +154,44 @@ function App() {
         
         { Object.keys(plant).length === 0 ?  
           <>
-          <h1 className='mt-5'>Selamat Datang di HerbaScan</h1>
-          <p>Aplikasi Pengenalan Tanaman Obat Indonesia Menggunakan Gambar Tanaman!</p>
-          <br/>
-          <p className='fw-bold'>Gambar yang dapat diterima oleh aplikasi : </p>
-          <p className='d-flex align-items-center'>
-            Daun Solo &nbsp; 
-            <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
-              Daun solo merupakan gambar daun yang diletakkan pada lantai dengan warna background putih polos.
-            </ModalGuidePhoto>
-          </p>
-          <p className='d-flex align-items-center'>
-            Daun Nempel &nbsp; 
-            <ModalGuidePhoto  title="Daun Nempel" imageType='daun-nempel' caption1="Benar" caption2="Salah Angle" caption3="Foto Blur" caption4="Terlalu Jauh" caption5="Terlalu Dekat" >
-            Gambar daun tanaman herbal yang masih menempel pada batangnya. Gambar ini digunakan untuk menunjukan bentuk orisinil daun yang tumbuh secara natural.
-            </ModalGuidePhoto>
-          </p>
-          <p className='d-flex align-items-center'>
-            Keseluruhan Tanaman &nbsp; 
-            <ModalGuidePhoto  title="Keseluruhan Tanaman" imageType='keseluruhan' caption1="Benar" caption2="Foto Blur" caption3="Terlalu Dekat" caption4="Terlalu Gelap" caption5="Terlalu Terang" >
-              Gambar tanaman herbal secara keseluruhan untuk memperlihatkan ketinggian tanaman, kepadatan daun, kepadatan ranting/batang, serta struktur tanaman herbal secara garis besar
-            </ModalGuidePhoto>
-          </p>
-          <p className='d-flex align-items-center'>
-            Batang &nbsp; 
-            <ModalGuidePhoto  title="Batang" imageType='batang' caption1="Benar" caption2="Tertutup Objek Lain" caption3="Fokus ke Objek Lain" caption4="Terlalu Jauh" caption5="Foto Blur" >
-            Gambar batang dari tanaman herbal yang menunjukan warna dan tekstur batang dari tanaman tersebut.
-            </ModalGuidePhoto>
-          </p>
-
-          <ModalPeraturan/>
+          <div className='px-5 py-2 pb-5 mt-4 text-white rounded-4' style={{background: `url(${require("./assets/foto-banner-3.jpg")})`, backgroundSize: 'cover', backgroundPosition: "center right"}}>
+            <h1 className='mt-5'>Selamat Datang di HerbaScan</h1>
+            <p>Aplikasi Pengenalan Tanaman Obat Indonesia Menggunakan Gambar Tanaman!</p>
+            <hr></hr>
+            <div className='text-center'>
+              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>📸 | </span>
+              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>🔎 | </span>
+              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>✅</span>
+            </div>
+            
+            <br/>
+            <p className='fw-bold'>Gambar yang dapat diterima oleh aplikasi : </p>
+            <p className='d-flex align-items-center'>
+              Daun Solo &nbsp;
+              <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
+                Daun solo merupakan gambar daun yang diletakkan pada lantai dengan warna background putih polos.
+              </ModalGuidePhoto>
+            </p>
+            <p className='d-flex align-items-center'>
+              Daun Nempel &nbsp;
+              <ModalGuidePhoto  title="Daun Nempel" imageType='daun-nempel' caption1="Benar" caption2="Salah Angle" caption3="Foto Blur" caption4="Terlalu Jauh" caption5="Terlalu Dekat" >
+              Gambar daun tanaman herbal yang masih menempel pada batangnya. Gambar ini digunakan untuk menunjukan bentuk orisinil daun yang tumbuh secara natural.
+              </ModalGuidePhoto>
+            </p>
+            <p className='d-flex align-items-center'>
+              Keseluruhan Tanaman &nbsp;
+              <ModalGuidePhoto  title="Keseluruhan Tanaman" imageType='keseluruhan' caption1="Benar" caption2="Foto Blur" caption3="Terlalu Dekat" caption4="Terlalu Gelap" caption5="Terlalu Terang" >
+                Gambar tanaman herbal secara keseluruhan untuk memperlihatkan ketinggian tanaman, kepadatan daun, kepadatan ranting/batang, serta struktur tanaman herbal secara garis besar
+              </ModalGuidePhoto>
+            </p>
+            <p className='d-flex align-items-center'>
+              Batang &nbsp;
+              <ModalGuidePhoto  title="Batang" imageType='batang' caption1="Benar" caption2="Tertutup Objek Lain" caption3="Fokus ke Objek Lain" caption4="Terlalu Jauh" caption5="Foto Blur" >
+              Gambar batang dari tanaman herbal yang menunjukan warna dan tekstur batang dari tanaman tersebut.
+              </ModalGuidePhoto>
+            </p>
+            <ModalPeraturan/>
+          </div>
           
           <div className='mt-5 mb-2'><input type='checkbox' id='useWebCamInput' onChange={toggleWebCam} /> <label htmlFor='useWebCamInput'>Use Web Cam</label></div>
           <div className={`p-5 rounded-4 shadow ${useWebCam ? '' : 'd-none'}`}>

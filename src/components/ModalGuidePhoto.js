@@ -8,12 +8,12 @@ function ModalGuidePhoto({title, imageType, caption1, caption2, caption3, captio
   }
   return (
     <>
-      <box-icon type='solid' name="info-circle" className='pointer' style={{cursor: 'pointer'}} onClick={initModal}></box-icon>
+      <box-icon type='solid' name="info-circle" className='pointer' color="white" style={{cursor: 'pointer'}} onClick={initModal}></box-icon>
       <Modal show={isShow} className='p-0'>
         <Modal.Header closeButton onClick={initModal}>
           <Modal.Title>Guideline {title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className='text-black'>
           <h6>{title}</h6>
           <p>{children}</p>
           <h6>Cara Foto</h6>
