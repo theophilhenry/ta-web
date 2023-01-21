@@ -10,8 +10,9 @@ const axios = require("axios").default;
 
 function App() {
   // const URL = '36.81.111.124'
-  const URL = '192.168.100.27'
-  // const URL = 'localhost'
+  // const URL = '192.168.100.27'
+  const URL = 'localhost'
+  // const URL = '192.168.13.113'
 
   const A = 'Daun Solo'
   const B = 'Daun Nempel'
@@ -33,10 +34,10 @@ function App() {
   const [filesC, setFilesC] = useState([]);
   const [filesD, setFilesD] = useState([]);
 
-  const storeFilesA = (file) => { setFilesA([...filesA, ...file]) }
-  const storeFilesB = (file) => { setFilesB([...filesB, ...file]) }
-  const storeFilesC = (file) => { setFilesC([...filesC, ...file]) }
-  const storeFilesD = (file) => { setFilesD([...filesD, ...file]) }
+  const storeFilesA = (file) => { if (filesA.length < 1) setFilesA([...filesA, ...file]) }
+  const storeFilesB = (file) => { if (filesB.length < 1) setFilesB([...filesB, ...file]) }
+  const storeFilesC = (file) => { if (filesC.length < 1) setFilesC([...filesC, ...file]) }
+  const storeFilesD = (file) => { if (filesD.length < 1) setFilesD([...filesD, ...file]) }
 
   const sendFileA = async (selectedFile) => {
     let formData = new FormData();
@@ -74,15 +75,37 @@ function App() {
   }
 
   function majority_vote(predictions) {
+    // '4': {'daun-solo':'best_model;95.94', 'daun-nempel':'best_model;95.67', 'keseluruhan': '5;97.30', 'batang': '5;91.36'},
+    var daun_solo = 95.94
+    var daun_nempel = 95.67
+    var keseluruhan = 97.30
+    var batang = 91.36
+
     var mapObj = {}
     var maximum_plant = ""
     var maximum_count = 0;
-    for (const plant of predictions) {
-      if(mapObj[plant] == null) mapObj[plant] = 1
-      else mapObj[plant]++;
-      if(mapObj[plant] > maximum_count){
-        maximum_plant = plant
-        maximum_count = mapObj[plant]
+
+    // A_B || C_D
+    if ([predictions[0],predictions[1]].sort().toString() === [predictions[2], predictions[3]].sort().toString()) {
+      maximum_plant = daun_solo + daun_nempel >= keseluruhan + batang ? predictions[0] : predictions[2]  
+    }
+    // A_C || B_D
+    else if ([predictions[0],predictions[2]].sort().toString() === [predictions[1], predictions[3]].sort().toString()) {
+      maximum_plant = daun_solo + keseluruhan >= daun_nempel + batang ? predictions[0] : predictions[1]  
+    }
+    // A_D || B_C
+    else if ([predictions[0],predictions[3]].sort().toString() === [predictions[1], predictions[2]].sort().toString()) {
+      maximum_plant = daun_solo + daun_nempel >= keseluruhan + batang ? predictions[0] : predictions[1]  
+    }
+    // No the same number
+    else {
+      for (const plant of predictions) {
+        if(mapObj[plant] == null) mapObj[plant] = 1
+        else mapObj[plant]++;
+        if(mapObj[plant] > maximum_count){
+          maximum_plant = plant
+          maximum_count = mapObj[plant]
+        }
       }
     }
     return maximum_plant
@@ -165,7 +188,7 @@ function App() {
             </div>
             
             <br/>
-            <p className='fw-bold'>Gambar yang dapat diterima oleh aplikasi : </p>
+            <p className='fw-bold'>Gambar yang diterima oleh aplikasi : </p>
             <p className='d-flex align-items-center'>
               Daun Solo &nbsp;
               <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
