@@ -22,6 +22,7 @@ function App() {
   const [cameraType, setCameraType] = useState('');
   const [useWebCam, setUseWebCam] = useState(false);
   const [loadingPrediction, setloadingPrediction] = useState(false);
+  const [isTreshold, setIsTreshold] = useState(false);
 
   // const [predictionsA, setPredictionsA] = useState([]);
   // const [predictionsB, setPredictionsB] = useState([]);
@@ -117,29 +118,53 @@ function App() {
     var tmp_predictB = []
     var tmp_predictC = []
     var tmp_predictD = []
+    var tmpIsTreshold;
     for (const file of filesA) {
       const output = await sendFileA(file.file_data)
+      console.log(output.confidence)
+      if (output.confidence < 0.75) {
+        tmpIsTreshold = true
+        break
+      }
       tmp_predictA = [...tmp_predictA, { ...file, class_name: output.class, confidence: output.confidence }]
       console.log('Prediction A : ')
       console.log(tmp_predictA)
     }
     for (const file of filesB) {
       const output = await sendFileB(file.file_data)
+      if (output.confidence < 0.65) {
+        tmpIsTreshold = true
+        break
+      }
       tmp_predictB = [...tmp_predictB, { ...file, class_name: output.class, confidence: output.confidence }]
       console.log('Prediction B : ')
       console.log(tmp_predictB)
     }
     for (const file of filesC) {
       const output = await sendFileC(file.file_data)
+      if (output.confidence < 0.50) {
+        tmpIsTreshold = true
+        break
+      }
       tmp_predictC = [...tmp_predictC, { ...file, class_name: output.class, confidence: output.confidence }]
       console.log('Prediction C : ')
       console.log(tmp_predictC)
     }
     for (const file of filesD) {
       const output = await sendFileD(file.file_data)
+      if (output.confidence < 0.99) {
+        tmpIsTreshold = true
+        break
+      }
       tmp_predictD = [...tmp_predictD, { ...file, class_name: output.class, confidence: output.confidence }]
       console.log('Prediction D : ')
       console.log(tmp_predictD)
+    }
+
+    if(tmpIsTreshold === true){
+      setIsTreshold(tmpIsTreshold);
+      setloadingPrediction(false);
+      return;
     }
 
     const all_prediction = [...tmp_predictA, ...tmp_predictB, ...tmp_predictC, ...tmp_predictD].map((predictions) => {
@@ -174,97 +199,107 @@ function App() {
       <Navbar />
       <main className="container">
 
-        
-        { Object.keys(plant).length === 0 ?  
-          <>
-          <div className='px-5 py-2 pb-5 mt-4 text-white rounded-4' style={{background: `url(${require("./assets/foto-banner-3.jpg")})`, backgroundSize: 'cover', backgroundPosition: "center right"}}>
-            <h1 className='mt-5'>Selamat Datang di HerbaScan</h1>
-            <p>Aplikasi Pengenalan Tanaman Obat Indonesia Menggunakan Gambar Tanaman!</p>
-            <hr></hr>
-            <div className='text-center'>
-              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>📸 | </span>
-              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>🔎 | </span>
-              <span className='font-monospace' style={{whiteSpace: "nowrap"}}>✅</span>
-            </div>
-            
-            <br/>
-            <p className='fw-bold'>Gambar yang diterima oleh aplikasi : </p>
-            <p className='d-flex align-items-center'>
-              Daun Solo &nbsp;
-              <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
-                Daun solo merupakan gambar daun yang diletakkan pada lantai dengan warna background putih polos.
-              </ModalGuidePhoto>
-            </p>
-            <p className='d-flex align-items-center'>
-              Daun Nempel &nbsp;
-              <ModalGuidePhoto  title="Daun Nempel" imageType='daun-nempel' caption1="Benar" caption2="Salah Angle" caption3="Foto Blur" caption4="Terlalu Jauh" caption5="Terlalu Dekat" >
-              Gambar daun tanaman herbal yang masih menempel pada batangnya. Gambar ini digunakan untuk menunjukan bentuk orisinil daun yang tumbuh secara natural.
-              </ModalGuidePhoto>
-            </p>
-            <p className='d-flex align-items-center'>
-              Keseluruhan Tanaman &nbsp;
-              <ModalGuidePhoto  title="Keseluruhan Tanaman" imageType='keseluruhan' caption1="Benar" caption2="Foto Blur" caption3="Terlalu Dekat" caption4="Terlalu Gelap" caption5="Terlalu Terang" >
-                Gambar tanaman herbal secara keseluruhan untuk memperlihatkan ketinggian tanaman, kepadatan daun, kepadatan ranting/batang, serta struktur tanaman herbal secara garis besar
-              </ModalGuidePhoto>
-            </p>
-            <p className='d-flex align-items-center'>
-              Batang &nbsp;
-              <ModalGuidePhoto  title="Batang" imageType='batang' caption1="Benar" caption2="Tertutup Objek Lain" caption3="Fokus ke Objek Lain" caption4="Terlalu Jauh" caption5="Foto Blur" >
-              Gambar batang dari tanaman herbal yang menunjukan warna dan tekstur batang dari tanaman tersebut.
-              </ModalGuidePhoto>
-            </p>
-            <ModalPeraturan/>
-          </div>
-          
-          <div className='mt-5 mb-2'><input type='checkbox' id='useWebCamInput' onChange={toggleWebCam} /> <label htmlFor='useWebCamInput'>Use Web Cam</label></div>
-          <div className={`p-5 rounded-4 shadow ${useWebCam ? '' : 'd-none'}`}>
-            <div className='mb-4'>
-              <h2>WebCam</h2>
-              <p>Pilih opsi di bawah untuk menggunakan kamera pada website : </p>
-              <div>
-                <input role={`button`} type="radio" name='prediction_method' value={A} id={A} onChange={onCameraTypeChanged} />
-                <label role={`button`} htmlFor={A} className='ms-2'>{A}</label>
+        { isTreshold ? 
+            <>
+              <div className='mt-5 mb-2'>
+                <h1>Gambar Tidak Dikenali</h1>
+                <p>Mohon maaf, gambar yang anda masukan tidak dapat dikenali oleh sistem. Silahkan coba kembali menggunakan gambar yang lain. Apabila mengalami kesulitan, mohon untuk membaca guideline foto pada halaman utama.</p>
               </div>
-              <div>
-                <input role={`button`} type="radio" name='prediction_method' value={B} id={B} onChange={onCameraTypeChanged} />
-                <label role={`button`} htmlFor={B} className='ms-2'>{B}</label>
+              <div className='my-4'>
+                <button className='btn btn-danger w-100' onClick={() => {setIsTreshold(false)}}>Kembali</button>
               </div>
-              <div>
-                <input role={`button`} type="radio" name='prediction_method' value={C} id={C} onChange={onCameraTypeChanged} />
-                <label role={`button`} htmlFor={C} className='ms-2'>{C}</label>
+            </>
+          : 
+            Object.keys(plant).length === 0 ?
+              <>
+              <div className='px-5 py-2 pb-5 mt-4 text-white rounded-4' style={{background: `url(${require("./assets/foto-banner-3.jpg")})`, backgroundSize: 'cover', backgroundPosition: "center right"}}>
+                <h1 className='mt-5'>Selamat Datang di HerbaScan</h1>
+                <p>Aplikasi Pengenalan Tanaman Obat Indonesia Menggunakan Gambar Tanaman!</p>
+                <hr></hr>
+                <div className='text-center'>
+                  <span className='font-monospace' style={{whiteSpace: "nowrap"}}>📸 | </span>
+                  <span className='font-monospace' style={{whiteSpace: "nowrap"}}>🔎 | </span>
+                  <span className='font-monospace' style={{whiteSpace: "nowrap"}}>✅</span>
+                </div>
+                
+                <br/>
+                <p className='fw-bold'>Gambar yang diterima oleh aplikasi : </p>
+                <p className='d-flex align-items-center'>
+                  Daun Solo &nbsp;
+                  <ModalGuidePhoto title="Daun Solo" imageType='daun-solo' caption1="Benar" caption2="Latar Ramai" caption3="Gambar Terpotong" caption4="Terlalu Jauh" caption5="Terlalu Dekat">
+                    Daun solo merupakan gambar daun yang diletakkan pada lantai dengan warna background putih polos.
+                  </ModalGuidePhoto>
+                </p>
+                <p className='d-flex align-items-center'>
+                  Daun Nempel &nbsp;
+                  <ModalGuidePhoto  title="Daun Nempel" imageType='daun-nempel' caption1="Benar" caption2="Salah Angle" caption3="Foto Blur" caption4="Terlalu Jauh" caption5="Terlalu Dekat" >
+                  Gambar daun tanaman herbal yang masih menempel pada batangnya. Gambar ini digunakan untuk menunjukan bentuk orisinil daun yang tumbuh secara natural.
+                  </ModalGuidePhoto>
+                </p>
+                <p className='d-flex align-items-center'>
+                  Keseluruhan Tanaman &nbsp;
+                  <ModalGuidePhoto  title="Keseluruhan Tanaman" imageType='keseluruhan' caption1="Benar" caption2="Foto Blur" caption3="Terlalu Dekat" caption4="Terlalu Gelap" caption5="Terlalu Terang" >
+                    Gambar tanaman herbal secara keseluruhan untuk memperlihatkan ketinggian tanaman, kepadatan daun, kepadatan ranting/batang, serta struktur tanaman herbal secara garis besar
+                  </ModalGuidePhoto>
+                </p>
+                <p className='d-flex align-items-center'>
+                  Batang &nbsp;
+                  <ModalGuidePhoto  title="Batang" imageType='batang' caption1="Benar" caption2="Tertutup Objek Lain" caption3="Fokus ke Objek Lain" caption4="Terlalu Jauh" caption5="Foto Blur" >
+                  Gambar batang dari tanaman herbal yang menunjukan warna dan tekstur batang dari tanaman tersebut.
+                  </ModalGuidePhoto>
+                </p>
+                <ModalPeraturan/>
               </div>
-              <div>
-                <input role={`button`} type="radio" name='prediction_method' value={D} id={D} onChange={onCameraTypeChanged} />
-                <label role={`button`} htmlFor={D} className='ms-2'>{D}</label>
+              
+              <div className='mt-5 mb-2'><input type='checkbox' id='useWebCamInput' onChange={toggleWebCam} /> <label htmlFor='useWebCamInput'>Use Web Cam</label></div>
+              <div className={`p-5 rounded-4 shadow ${useWebCam ? '' : 'd-none'}`}>
+                <div className='mb-4'>
+                  <h2>WebCam</h2>
+                  <p>Pilih opsi di bawah untuk menggunakan kamera pada website : </p>
+                  <div>
+                    <input role={`button`} type="radio" name='prediction_method' value={A} id={A} onChange={onCameraTypeChanged} />
+                    <label role={`button`} htmlFor={A} className='ms-2'>{A}</label>
+                  </div>
+                  <div>
+                    <input role={`button`} type="radio" name='prediction_method' value={B} id={B} onChange={onCameraTypeChanged} />
+                    <label role={`button`} htmlFor={B} className='ms-2'>{B}</label>
+                  </div>
+                  <div>
+                    <input role={`button`} type="radio" name='prediction_method' value={C} id={C} onChange={onCameraTypeChanged} />
+                    <label role={`button`} htmlFor={C} className='ms-2'>{C}</label>
+                  </div>
+                  <div>
+                    <input role={`button`} type="radio" name='prediction_method' value={D} id={D} onChange={onCameraTypeChanged} />
+                    <label role={`button`} htmlFor={D} className='ms-2'>{D}</label>
+                  </div>
+                </div>
+                <div>
+                  {
+                    cameraType === A ?
+                      <Cameras cameraType={cameraType} storeFiles={storeFilesA} /> :
+                      cameraType === B ?
+                        <Cameras cameraType={cameraType} storeFiles={storeFilesB} /> :
+                        cameraType === C ?
+                          <Cameras cameraType={cameraType} storeFiles={storeFilesC} /> :
+                          cameraType === D ?
+                            <Cameras cameraType={cameraType} storeFiles={storeFilesD} /> :
+                            <button className={`btn btn-warning w-100 disabled`}>Harap Pilih Pengaturan Sebelum Menggunakan Kamera</button>
+                  }
+                </div>
               </div>
-            </div>
-            <div>
-              {
-                cameraType === A ?
-                  <Cameras cameraType={cameraType} storeFiles={storeFilesA} /> :
-                  cameraType === B ?
-                    <Cameras cameraType={cameraType} storeFiles={storeFilesB} /> :
-                    cameraType === C ?
-                      <Cameras cameraType={cameraType} storeFiles={storeFilesC} /> :
-                      cameraType === D ?
-                        <Cameras cameraType={cameraType} storeFiles={storeFilesD} /> :
-                        <button className={`btn btn-warning w-100 disabled`}>Harap Pilih Pengaturan Sebelum Menggunakan Kamera</button>
-              }
-            </div>
-          </div>
-          
-          <InputGambar cameraType={A} storeFiles={storeFilesA} files={filesA} clearFiles={() => { setFilesA([]) }} />
-          <InputGambar cameraType={B} storeFiles={storeFilesB} files={filesB} clearFiles={() => { setFilesB([]) }} />
-          <InputGambar cameraType={C} storeFiles={storeFilesC} files={filesC} clearFiles={() => { setFilesC([]) }} />
-          <InputGambar cameraType={D} storeFiles={storeFilesD} files={filesD} clearFiles={() => { setFilesD([]) }} />
-  
-          <div className='my-4'>
-            <button className={`btn btn-primary w-100 ${loadingPrediction && 'disabled'}`} onClick={predictFiles}>{loadingPrediction ? 'Loading ...' : 'Prediksi'}</button>
-          </div>
-          </>
-        : 
-          <Result plant={plant} setPlant={setPlant}/>
-        }
+              
+              <InputGambar cameraType={A} storeFiles={storeFilesA} files={filesA} clearFiles={() => { setFilesA([]) }} />
+              <InputGambar cameraType={B} storeFiles={storeFilesB} files={filesB} clearFiles={() => { setFilesB([]) }} />
+              <InputGambar cameraType={C} storeFiles={storeFilesC} files={filesC} clearFiles={() => { setFilesC([]) }} />
+              <InputGambar cameraType={D} storeFiles={storeFilesD} files={filesD} clearFiles={() => { setFilesD([]) }} />
+      
+              <div className='my-4'>
+                <button className={`btn btn-primary w-100 ${loadingPrediction && 'disabled'}`} onClick={predictFiles}>{loadingPrediction ? 'Loading ...' : 'Prediksi'}</button>
+              </div>
+              </>
+            : 
+              <Result plant={plant} setPlant={setPlant}/>
+            }
         
       </main>
       
